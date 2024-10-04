@@ -16,11 +16,11 @@ Fitur aplikasi:
 
 ### Susunan Tim
 
-| NIM        | Nama               | Username Github |
-|------------|--------------------|-----------------|
-| 6706220110 | Iqbaal Hibatullooh | iqbaalhibatulloh    
-| 670622xxxx | Nama Mahasiswa2    | usernameMhs2    
-| 670622xxxx | Nama Mahasiswa3    | usernameMhs3    
+| NIM        | Nama                                 | Username Github |
+|------------|--------------------------------------|-----------------|
+| 6706220110 | Iqbaal Hibatullooh                   | iqbaalhibatulloh    
+| 6706220088 | Muhammad Ihsan Firjatulloh Al Khasaf | mihsnfaa    
+| 670622xxxx | Nama Mahasiswa3                      | usernameMhs3    
 |
 |
 | 
