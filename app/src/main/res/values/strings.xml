@@ -3,4 +3,9 @@
     <string name="temperature">Temperature</string>
     <string name="home">Home</string>
     <string name="settings">Settings</string>
+    <string name="history">History</string>
+    <string name="Arrow_Right">Panah Kanan</string>
+    <string name="language">Language</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="share_app">Share App</string>
 </resources>
