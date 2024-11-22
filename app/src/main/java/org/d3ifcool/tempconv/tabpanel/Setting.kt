@@ -12,37 +12,38 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.d3ifcool.tempconv.R
+import org.d3ifcool.tempconv.util.SettingsDataStore
 
 @Composable
-fun Setting(navController: NavHostController) {
-    var isDarkMode by rememberSaveable {
-        mutableStateOf(false)
-    }
+fun Setting(
+    navController: NavHostController,
+    isDarkMode: Boolean
+) {
+    val dataStore = SettingsDataStore(LocalContext.current)
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
@@ -78,14 +79,22 @@ fun Setting(navController: NavHostController) {
                 )
             )
         }
+
         ButtonSetting(
-            iconResId = Icons.Filled.DarkMode,
-            textResId = R.string.dark_mode,
-            {}
+            iconResId =  if (isDarkMode) Icons.Filled.LightMode else Icons.Filled.DarkMode,
+            textResId = if (isDarkMode) R.string.light_mode else R.string.dark_mode,
+            {
+                CoroutineScope(Dispatchers.IO).launch {
+                    dataStore.saveDarkMode(!isDarkMode)
+                }
+            }
         ) {
             Switch(
                 checked = isDarkMode,
-                onCheckedChange = { isDarkMode = !isDarkMode },
+                onCheckedChange = {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        dataStore.saveDarkMode(!isDarkMode)
+                    } },
                 colors = SwitchDefaults.colors(
                     checkedBorderColor = MaterialTheme.colorScheme.onPrimary
                 )
@@ -142,5 +151,5 @@ fun ButtonSetting(
 @Preview(showBackground = true)
 @Composable
 fun SettingsPrev() {
-    Setting(rememberNavController())
+    Setting(rememberNavController(), true)
 }
