@@ -20,4 +20,4 @@ Fitur aplikasi:
 |------------|--------------------------------------|-----------------|
 | 6706220110 | Iqbaal Hibatullooh                   | iqbaalhibatulloh    
 | 6706220088 | Muhammad Ihsan Firjatulloh Al Khasaf | mihsnfaa    
-| 6706223074 | Rizqy Nurfauzella  | RizqyNurfauzella
+| 6706223074 | Rizqy Nurfauzella                    | RizqyNurfauzella
