@@ -10,7 +10,7 @@ import org.d3ifcool.tempconv.tabpanel.Setting
 import org.d3ifcool.tempconv.tabpanel.Temperature
 
 @Composable
-fun NavigationGraph(navController: NavHostController = rememberNavController()) {
+fun NavigationGraph(navController: NavHostController = rememberNavController(), isDarkMode: Boolean) {
    NavHost(
       navController = navController,
       startDestination = Screen.Home.route
@@ -23,7 +23,7 @@ fun NavigationGraph(navController: NavHostController = rememberNavController()) 
          Temperature(navController)
       }
       composable(route = Screen.Setting.route) {
-         Setting(navController)
+         Setting(navController, isDarkMode)
       }
    }
 }

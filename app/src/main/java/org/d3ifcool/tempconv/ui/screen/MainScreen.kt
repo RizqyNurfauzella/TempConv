@@ -44,6 +44,7 @@ enum class BottomButtonNavigation(
 @Composable
 fun MainScreen(
     navController: NavHostController,
+    isDarkMode: Boolean,
 ){
     val bottomNavigationItems = BottomButtonNavigation.entries.toTypedArray()
 
@@ -100,7 +101,7 @@ fun MainScreen(
                 when(index) {
                     0 -> Home(navController)
                     1 -> Temperature(navController)
-                    2 -> Setting(navController)
+                    2 -> Setting(navController, isDarkMode)
                 }
             }
         }
@@ -110,5 +111,5 @@ fun MainScreen(
 @Preview
 @Composable
 fun MainScreenPreview() {
-    MainScreen(rememberNavController())
+    MainScreen(rememberNavController(), true)
 }
