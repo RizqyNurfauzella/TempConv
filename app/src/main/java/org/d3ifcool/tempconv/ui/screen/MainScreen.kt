@@ -92,18 +92,17 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier
-                    .weight(1f)
+                modifier = Modifier.weight(1f)
             ) { index ->
-                when(index) {
-                    0 -> Home(navController)
+                when (index) {
+                    0 -> Home(navController, city = "Bandung", apiKey = "6339e42292e9448490e175455242512")
                     1 -> Temperature(navController)
                     2 -> Setting(navController, isDarkMode)
                 }
             }
+
         }
     }
 }
