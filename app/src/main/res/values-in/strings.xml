@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TempConv</string>
+    <string name="temperature">Suhu</string>
+    <string name="home">Beranda</string>
+    <string name="settings">Pengaturan</string>
+    <string name="history">Riwayat</string>
+    <string name="Arrow_Right">Panah Kanan</string>
+    <string name="language">Bahasa</string>
+    <string name="dark_mode">Mode Gelap</string>
+    <string name="share_app">Bagikan Aplikasi</string>
+    <string name="light_mode">Mode Terang</string>
+</resources>

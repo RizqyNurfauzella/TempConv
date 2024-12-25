@@ -1,28 +1,21 @@
 package org.d3ifcool.tempconv.ui.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
@@ -45,11 +38,11 @@ enum class BottomButtonNavigation(
 fun MainScreen(
     navController: NavHostController,
     isDarkMode: Boolean,
-){
+) {
     val bottomNavigationItems = BottomButtonNavigation.entries.toTypedArray()
 
     var selectedTabIndex by rememberSaveable {
-        mutableIntStateOf(0)
+        mutableStateOf(0)
     }
     val pagerState = rememberPagerState {
         bottomNavigationItems.size
@@ -62,20 +55,31 @@ fun MainScreen(
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.surface,
+                tonalElevation = 8.dp
+            ) {
                 bottomNavigationItems.forEachIndexed { index, screen ->
-                    val color = if (index == selectedTabIndex) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.secondary
-                    }
+                    val isSelected = index == selectedTabIndex
                     NavigationBarItem(
                         icon = {
                             val iconPainter = painterResource(id = screen.iconResId)
-                            Icon(painter = iconPainter, contentDescription = null, tint = color)
+                            Icon(
+                                painter = iconPainter,
+                                contentDescription = null,
+                                tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                            )
                         },
-                        label = { Text(stringResource(id = screen.textResId), color = color) },
-                        selected = index == selectedTabIndex,
+                        label = {
+                            Text(
+                                text = stringResource(id = screen.textResId),
+                                style = MaterialTheme.typography.labelMedium.copy(
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                                ),
+                                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                            )
+                        },
+                        selected = isSelected,
                         onClick = {
                             scope.launch {
                                 pagerState.animateScrollToPage(index)
@@ -91,6 +95,14 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.background,
+                            MaterialTheme.colorScheme.surface
+                        )
+                    )
+                )
         ) {
             HorizontalPager(
                 state = pagerState,
@@ -102,7 +114,6 @@ fun MainScreen(
                     2 -> Setting(navController, isDarkMode)
                 }
             }
-
         }
     }
 }
