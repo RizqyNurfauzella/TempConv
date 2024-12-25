@@ -9,18 +9,24 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,18 +49,24 @@ import org.d3ifcool.tempconv.model.MainViewModel
 
 @Composable
 fun Home(navController: NavHostController, city: String, apiKey: String, mainViewModel: MainViewModel = viewModel()) {
+    // Mengambil data dari ViewModel
     val isReady by mainViewModel.isReady.collectAsState()
     val weatherDescription by mainViewModel.weatherDescription.collectAsState()
     val temperature by mainViewModel.temperature.collectAsState()
     val date by mainViewModel.date.collectAsState()
     val weatherIcon by mainViewModel.weatherIcon.collectAsState()
+    val hourlyWeather by mainViewModel.hourlyWeather.collectAsState()
 
+    var inputCity by remember { mutableStateOf(city) }
+
+    // Memastikan aplikasi sedang menunggu data cuaca
     if (!isReady) {
         Text("Loading...", modifier = Modifier.fillMaxSize(), color = Color.Gray)
     } else {
-        // Memanggil getWeather untuk mendapatkan data cuaca
+        // Memanggil data cuaca dan data cuaca per jam saat pertama kali
         LaunchedEffect(Unit) {
             mainViewModel.getWeather(city, apiKey)
+            mainViewModel.getHourlyWeather(city, apiKey)
         }
 
         Column(
@@ -63,7 +75,7 @@ fun Home(navController: NavHostController, city: String, apiKey: String, mainVie
                 .padding(24.dp)
                 .fillMaxSize()
         ) {
-            // TopAppBar
+            // TopAppBar dengan Nama Aplikasi dan Button Refresh
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
@@ -74,17 +86,38 @@ fun Home(navController: NavHostController, city: String, apiKey: String, mainVie
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.ExtraBold
                 )
-                IconButton(onClick = {}) {
+                IconButton(onClick = {
+                    mainViewModel.getWeather(inputCity, apiKey)
+                    mainViewModel.getHourlyWeather(inputCity, apiKey)
+                }) {
                     Icon(
                         painter = painterResource(R.drawable.refresh_icon),
-                        contentDescription = ""
+                        contentDescription = "Refresh Weather"
                     )
                 }
             }
 
-            // Menambahkan kota di sini
+            // Input Kota Baru
+            TextField(
+                value = inputCity,
+                onValueChange = { inputCity = it },
+                label = { Text("Enter City") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Button(
+                onClick = {
+                    mainViewModel.getWeather(inputCity, apiKey)
+                    mainViewModel.getHourlyWeather(inputCity, apiKey)
+                },
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text("Get Weather")
+            }
+
+            // Menampilkan data cuaca untuk lokasi
             Text(
-                city,
+                inputCity,
                 style = MaterialTheme.typography.titleLarge.copy(
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold
@@ -179,6 +212,51 @@ fun Home(navController: NavHostController, city: String, apiKey: String, mainVie
                                     textAlign = TextAlign.End,
                                 )
                             )
+                        }
+                    }
+                }
+            }
+
+            // Cuaca Tiap Jam
+            Text(
+                "Hourly Weather",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(top = 16.dp)
+            )
+
+            // Menampilkan pesan jika data hourlyWeather kosong
+            if (hourlyWeather.isEmpty()) {
+                Text("Hourly weather data is not available.", color = Color.Gray)
+            } else {
+                // Render data hourlyWeather
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                ) {
+                    hourlyWeather.forEach { weather ->
+                        Card(
+                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
+                            shape = RoundedCornerShape(16.dp),
+                            modifier = Modifier.padding(4.dp)
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.padding(8.dp)
+                            ) {
+                                Text(weather.time, style = TextStyle(color = Color.White))
+                                Image(
+                                    painter = rememberAsyncImagePainter("https:${weather.icon}"),
+                                    contentDescription = "Weather Icon",
+                                    modifier = Modifier.size(48.dp)
+                                )
+                                Text(
+                                    "${weather.temperature.toInt()}°C",
+                                    style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold)
+                                )
+                            }
                         }
                     }
                 }
