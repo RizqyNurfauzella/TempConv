@@ -2,9 +2,8 @@ package org.d3ifcool.tempconv.tabpanel
 
 import android.content.Context
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -63,49 +62,48 @@ fun Setting(
     // State untuk memicu recomposition
     val languageState = remember { mutableStateOf(Locale.getDefault().language) }
     val isLoading = remember { mutableStateOf(false) }
+    val themeState = remember { mutableStateOf(isDarkMode) }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+    Crossfade(targetState = themeState.value) { isDark ->
+        Surface(
             modifier = Modifier
-                .padding(24.dp)
+                .fillMaxSize()
+                .animateContentSize(),
+            color = if (isDark) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
         ) {
-            Text(
-                text = stringResource(id = R.string.settings),
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            // Button settings
-            ButtonSetting(
-                iconResId = Icons.Filled.History,
-                textResId = R.string.history,
-                onClick = {}
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier
+                    .padding(24.dp)
             ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = stringResource(R.string.Arrow_Right),
-                    tint = MaterialTheme.colorScheme.onSurface
+                Text(
+                    text = stringResource(id = R.string.settings),
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
                 )
-            }
 
-            // Dropdown for language selection with animation
-            val expanded = remember { mutableStateOf(false) }
-            ButtonSetting(
-                iconResId = Icons.Filled.Translate,
-                textResId = R.string.language,
-                onClick = {
-                    expanded.value = !expanded.value
+                // Button settings
+                ButtonSetting(
+                    iconResId = Icons.Filled.History,
+                    textResId = R.string.history,
+                    onClick = {}
+                ) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = stringResource(R.string.Arrow_Right),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
                 }
-            ) {
-                AnimatedVisibility(
-                    visible = expanded.value,
-                    enter = fadeIn(),
-                    exit = fadeOut()
+
+                // Dropdown for language selection with animation
+                val expanded = remember { mutableStateOf(false) }
+                ButtonSetting(
+                    iconResId = Icons.Filled.Translate,
+                    textResId = R.string.language,
+                    onClick = {
+                        expanded.value = !expanded.value
+                    }
                 ) {
                     DropdownMenu(
                         expanded = expanded.value,
@@ -126,58 +124,60 @@ fun Setting(
                             text = { Text("Bahasa Indonesia") }
                         )
                     }
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = stringResource(R.string.Arrow_Right),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
                 }
-                Icon(
-                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = stringResource(R.string.Arrow_Right),
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-            }
 
-            // Show loading animation when changing language
-            if (isLoading.value) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-                }
-            }
-
-            ButtonSetting(
-                iconResId = if (isDarkMode) Icons.Filled.LightMode else Icons.Filled.DarkMode,
-                textResId = if (isDarkMode) R.string.light_mode else R.string.dark_mode,
-                onClick = {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        dataStore.saveDarkMode(!isDarkMode)
+                // Show loading animation when changing language
+                if (isLoading.value) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                     }
                 }
-            ) {
-                Switch(
-                    checked = isDarkMode,
-                    onCheckedChange = {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            dataStore.saveDarkMode(!isDarkMode)
-                        }
-                    },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colorScheme.primary,
-                        uncheckedThumbColor = MaterialTheme.colorScheme.secondary
-                    )
-                )
-            }
 
-            ButtonSetting(
-                iconResId = Icons.Filled.Share,
-                textResId = R.string.share_app,
-                onClick = {}
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = stringResource(R.string.Arrow_Right),
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
+                ButtonSetting(
+                    iconResId = if (isDark) Icons.Filled.LightMode else Icons.Filled.DarkMode,
+                    textResId = if (isDark) R.string.light_mode else R.string.dark_mode,
+                    onClick = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            dataStore.saveDarkMode(!isDark)
+                        }
+                        themeState.value = !themeState.value // Trigger recomposition
+                    }
+                ) {
+                    Switch(
+                        checked = isDark,
+                        onCheckedChange = {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                dataStore.saveDarkMode(!isDark)
+                            }
+                            themeState.value = !themeState.value // Trigger recomposition
+                        },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = MaterialTheme.colorScheme.primary,
+                            uncheckedThumbColor = MaterialTheme.colorScheme.secondary
+                        )
+                    )
+                }
+
+                ButtonSetting(
+                    iconResId = Icons.Filled.Share,
+                    textResId = R.string.share_app,
+                    onClick = {}
+                ) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = stringResource(R.string.Arrow_Right),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
         }
     }

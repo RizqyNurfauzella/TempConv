@@ -7,7 +7,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Thermostat
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -39,7 +44,6 @@ fun Temperature(navController: NavHostController) {
     var kelvin by remember { mutableStateOf("") }
     var reaumur by remember { mutableStateOf("") }
 
-    // Fungsi untuk konversi suhu dari Celsius
     fun convertFromCelsius(input: String) {
         val value = input.toFloatOrNull() ?: 0f
         fahrenheit = ((value * 9 / 5) + 32).toString()
@@ -47,7 +51,6 @@ fun Temperature(navController: NavHostController) {
         reaumur = (value * 4 / 5).toString()
     }
 
-    // Fungsi untuk mereset semua input dan output
     fun resetFields() {
         celsius = ""
         fahrenheit = ""
@@ -61,7 +64,6 @@ fun Temperature(navController: NavHostController) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Header Row
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -83,25 +85,35 @@ fun Temperature(navController: NavHostController) {
             }
         }
 
-        // Input Celsius
         TemperatureInputField(
             label = "Celsius",
             value = celsius,
             onValueChange = {
                 celsius = it
-                convertFromCelsius(it) // Perbarui konversi suhu setiap kali input berubah
+                convertFromCelsius(it)
             }
         )
 
-        Divider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+        Divider(
+            modifier = Modifier.padding(vertical = 8.dp),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+        )
 
-        // Hasil konversi
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            TemperatureOutputField(label = "Fahrenheit", value = fahrenheit)
-            TemperatureOutputField(label = "Kelvin", value = kelvin)
-            TemperatureOutputField(label = "Reaumur", value = reaumur)
+            TemperatureOutputField(
+                label = "Fahrenheit",
+                value = fahrenheit,
+            )
+            TemperatureOutputField(
+                label = "Kelvin",
+                value = kelvin,
+            )
+            TemperatureOutputField(
+                label = "Reaumur",
+                value = reaumur,
+            )
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -122,27 +134,41 @@ fun TemperatureInputField(label: String, value: String, onValueChange: (String) 
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
             unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-        )
+        ),
+        shape = RoundedCornerShape(12.dp)
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TemperatureOutputField(label: String, value: String) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = {}, // Output tidak dapat diedit
-        label = { Text(label) },
-        enabled = false,
+    Card(
+        shape = RoundedCornerShape(12.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            disabledBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-            disabledTextColor = MaterialTheme.colorScheme.onSurface
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
         )
-    )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Thermostat,
+                contentDescription = "$label Icon",
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = "$label: $value",
+                style = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface)
+            )
+        }
+    }
 }
+
 
 @Preview(showBackground = true)
 @Composable
