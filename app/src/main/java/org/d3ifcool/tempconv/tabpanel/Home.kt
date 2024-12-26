@@ -162,7 +162,7 @@ fun Home(
                     modifier = Modifier
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.primary)
-                        .padding(8.dp)
+                        .padding(4.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Search,
