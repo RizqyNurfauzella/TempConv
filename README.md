@@ -7,12 +7,11 @@ Fitur aplikasi:
 2. Input dan Output Otomatis
 3. Mode Otomatis dan Manual
 4. History dan Riwayat Konversi
-5. Pengaturan Preset
-6. Grafik Suhu
-7. Unit Suhu Khusus
-8. Tema Ligth Mode & Dark Mode
-9. Fitur Tambahan Cuaca
-10. Support Multi-Language
+5. Grafik Suhu
+6. Unit Suhu Khusus
+7. Tema Ligth Mode & Dark Mode
+8. Fitur Tambahan Cuaca
+9. Support Multi-Language
 
 ### Susunan Tim
 
