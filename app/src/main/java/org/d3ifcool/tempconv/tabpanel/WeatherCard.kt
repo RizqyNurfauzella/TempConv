@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -64,11 +65,25 @@ fun WeatherCard(
                         .size(120.dp)
                         .padding(bottom = 16.dp)
                 )
-                Text(
-                    text = "${temperature}°C",
-                    style = MaterialTheme.typography.displayMedium.copy(color = MaterialTheme.colorScheme.onSurface),
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.padding(bottom = 8.dp)
-                )
+                ) {
+                    Text(
+                        text = "${temperature}°C",
+                        style = MaterialTheme.typography.displayMedium.copy(color = MaterialTheme.colorScheme.onSurface),
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    Icon(
+                        imageVector = Icons.Default.SwapHoriz,
+                        contentDescription = "Convert Temperature",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { /* Tambahkan fungsi nanti */ }
+                    )
+                }
                 Text(
                     weatherDescription,
                     style = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
