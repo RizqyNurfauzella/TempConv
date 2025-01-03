@@ -5,8 +5,9 @@ import androidx.navigation.compose.rememberNavController
 import org.d3ifcool.tempconv.ui.screen.MainScreen
 
 @Composable
-fun TempConvApp() {
+fun TempConvApp(isDarkMode: Boolean) {
     MainScreen(
         rememberNavController(),
+        isDarkMode,
     )
 }
