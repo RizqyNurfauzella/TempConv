@@ -1,5 +1,6 @@
 package org.d3ifcool.tempconv.tabpanel
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -112,10 +113,20 @@ fun Home(
                 temperature = temperature.toInt(),
                 weatherDescription = weatherDescription,
                 date = date,
-                windSpeed = windSpeed.toString(), // Konversi ke String
-                humidity = humidity.toString(), // Konversi ke String
-                rainProbability = rainProbability.toString() // Konversi ke String
+                windSpeed = windSpeed.toString(),
+                humidity = humidity.toString(),
+                rainProbability = rainProbability.toString(),
+                onShareClick = { context ->
+                    val shareText = "Weather in $currentCity: $temperature°C, $weatherDescription."
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, shareText)
+                    }
+                    context.startActivity(Intent.createChooser(shareIntent, "Share Weather"))
+                }
             )
+
+
             // HourlyWeather
             HourlyWeather(hourlyWeather = hourlyWeather)
         }
