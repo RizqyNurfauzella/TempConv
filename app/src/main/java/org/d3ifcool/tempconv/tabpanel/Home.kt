@@ -3,15 +3,7 @@ package org.d3ifcool.tempconv.tabpanel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,16 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -93,13 +76,12 @@ fun Home(
             )
         }
     } else {
-        // Enable vertical scrolling
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState()) // Add scrolling here
+                .verticalScroll(rememberScrollState()) // Enable vertical scrolling
         ) {
             // Header with Location and Input
             Row(
@@ -145,7 +127,7 @@ fun Home(
                         .weight(1f)
                         .padding(end = 8.dp),
                     shape = RoundedCornerShape(8.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                    colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
                         unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         cursorColor = MaterialTheme.colorScheme.primary
@@ -213,7 +195,7 @@ fun Home(
                         style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
-                    Divider(
+                    HorizontalDivider(
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
                         thickness = 1.dp,
                         modifier = Modifier.padding(vertical = 8.dp)
@@ -303,7 +285,6 @@ fun Home(
         }
     }
 }
-
 
 @Preview
 @Composable
