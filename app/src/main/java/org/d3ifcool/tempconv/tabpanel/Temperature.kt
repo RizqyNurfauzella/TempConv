@@ -121,6 +121,7 @@ fun Temperature(navController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TemperatureInputField(label: String, value: String, onValueChange: (String) -> Unit) {
     OutlinedTextField(
@@ -131,7 +132,7 @@ fun TemperatureInputField(label: String, value: String, onValueChange: (String) 
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        colors = OutlinedTextFieldDefaults.colors(
+        colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
             unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
             cursorColor = MaterialTheme.colorScheme.primary,
