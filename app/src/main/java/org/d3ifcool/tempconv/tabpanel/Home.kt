@@ -123,10 +123,9 @@ fun Home(
                         putExtra(Intent.EXTRA_TEXT, shareText)
                     }
                     context.startActivity(Intent.createChooser(shareIntent, "Share Weather"))
-                }
+                },
+                navHostController = navController
             )
-
-
             // HourlyWeather
             HourlyWeather(hourlyWeather = hourlyWeather)
         }

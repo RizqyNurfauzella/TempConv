@@ -13,14 +13,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -94,10 +94,11 @@ fun Temperature(navController: NavHostController) {
             }
         )
 
-        Divider(
+        HorizontalDivider(
             modifier = Modifier.padding(vertical = 8.dp),
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
         )
+
 
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -120,7 +121,6 @@ fun Temperature(navController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TemperatureInputField(label: String, value: String, onValueChange: (String) -> Unit) {
     OutlinedTextField(
@@ -131,15 +131,18 @@ fun TemperatureInputField(label: String, value: String, onValueChange: (String) 
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
+        colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+            cursorColor = MaterialTheme.colorScheme.primary,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
         ),
         shape = RoundedCornerShape(12.dp)
     )
+
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TemperatureOutputField(label: String, value: String) {
     Card(

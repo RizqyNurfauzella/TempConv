@@ -65,7 +65,10 @@ fun Setting(
     val isLoading = remember { mutableStateOf(false) }
     val themeState = remember { mutableStateOf(isDarkMode) }
 
-    Crossfade(targetState = themeState.value) { isDark ->
+    Crossfade(
+        targetState = themeState.value,
+        label = "Theme Crossfade Animation"
+    ) { isDark ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()

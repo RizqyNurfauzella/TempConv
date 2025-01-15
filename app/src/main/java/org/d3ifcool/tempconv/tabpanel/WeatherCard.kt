@@ -1,5 +1,6 @@
 package org.d3ifcool.tempconv.tabpanel
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,10 +25,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import org.d3ifcool.tempconv.navigation.Screen
 
 @Composable
 fun WeatherCard(
+    navHostController: NavHostController,
     currentCity: String,
     weatherIcon: String,
     temperature: Int,
@@ -81,7 +85,13 @@ fun WeatherCard(
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
                             .size(24.dp)
-                            .clickable { /* Tambahkan fungsi nanti */ }
+                            .clickable {
+                                try {
+                                    navHostController.navigate(Screen.Temperature.route)
+                                } catch (e: Exception) {
+                                    Log.e("WeatherCard", "Navigation failed: ${e.message}")
+                                }
+                            }
                     )
                 }
                 Text(
